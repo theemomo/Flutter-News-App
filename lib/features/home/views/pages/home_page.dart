@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/core/utils/route/app_routes.dart';
 import 'package:news_app/core/utils/theme/app_colors.dart';
 import 'package:news_app/features/home/home_cubit/home_cubit.dart';
 import 'package:news_app/features/home/views/widgets/custom_carousel_slider.dart';
@@ -45,7 +46,9 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.searchRoute);
+              },
               highlightColor: Colors.transparent,
               icon: DecoratedBox(
                 decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
@@ -97,7 +100,10 @@ class _HomePageState extends State<HomePage> {
                     current is RecommendedNewsLoading,
                 builder: (context, state) {
                   if (state is RecommendedNewsLoaded) {
-                    return RecommendedNewsWidget(articles: state.articles ?? []);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: RecommendedNewsWidget(articles: state.articles ?? []),
+                    );
                   } else if (state is RecommendedNewsError) {
                     return Center(child: Text(state.message));
                   } else if (state is RecommendedNewsLoading) {
