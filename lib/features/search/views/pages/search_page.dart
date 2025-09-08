@@ -13,9 +13,24 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  late TextEditingController _searchController;
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+    _scrollController = ScrollController();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+        context.read<SearchCubit>().loadMore();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _searchController = TextEditingController();
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -158,16 +173,33 @@ class _SearchPageState extends State<SearchPage> {
                   if (state is SearchResultsError) {
                     return Center(child: Text(state.message));
                   } else if (state is SearchResultsLoading) {
-                    return const Center(child: CircularProgressIndicator.adaptive());
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(
+                        valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                      ),
+                    );
                   } else if (state is SearchResultsLoaded) {
                     if (state.articles.isEmpty) {
                       return const Center(child: Text("No Articles Found!"));
                     }
                     final articles = state.articles;
                     return ListView.builder(
-                      itemCount: articles.length,
+                      controller: _scrollController,
+                      itemCount: articles.length + (state.hasMore ? 1 : 0),
                       itemBuilder: (context, index) {
-                        return ArticleItemWidget(article: articles[index]);
+                        if (index < articles.length) {
+                          return ArticleItemWidget(article: articles[index]);
+                        } else {
+                          // loader at bottom
+                          return const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Center(
+                              child: CircularProgressIndicator.adaptive(
+                                valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                              ),
+                            ),
+                          );
+                        }
                       },
                     );
                   } else {

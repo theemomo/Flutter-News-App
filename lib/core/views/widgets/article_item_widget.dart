@@ -35,7 +35,12 @@ class ArticleItemWidget extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.38,
                     height: MediaQuery.of(context).size.height * 0.16,
                     color: Colors.grey.shade300,
-                    child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                    child: const Center(
+                      child: CircularProgressIndicator.adaptive(
+                        valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                        strokeWidth: 2,
+                      ),
+                    ),
                   );
                 },
                 errorWidget: (context, url, error) => CachedNetworkImage(

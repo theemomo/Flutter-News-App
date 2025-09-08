@@ -1,6 +1,5 @@
 part of 'search_cubit.dart';
 
-
 sealed class SearchState {
   const SearchState();
 }
@@ -11,8 +10,9 @@ final class SearchResultsLoading extends SearchState {}
 
 final class SearchResultsLoaded extends SearchState {
   final List<Article> articles;
+  final bool hasMore;
 
-  const SearchResultsLoaded(this.articles);
+  const SearchResultsLoaded({required this.articles,required this.hasMore});
 }
 
 final class SearchResultsError extends SearchState {

@@ -90,7 +90,12 @@ class ArticleDetailsPage extends StatelessWidget {
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.59,
                 color: Colors.grey.shade300,
-                child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                child: const Center(
+                  child: CircularProgressIndicator.adaptive(
+                    valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                    strokeWidth: 2,
+                  ),
+                ),
               );
             },
             errorWidget: (context, url, error) => CachedNetworkImage(
@@ -200,9 +205,9 @@ class ArticleDetailsPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                               Text(
-                                "${article.description} ${article.description} ${article.description} ${article.description} ${article.content}",
+                                "${article.description ?? ""} ${article.description ?? ""} ${article.description ?? ""} ${article.description ?? ""} ${article.content ?? ""}",
                                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                   color: AppColors.black,
                                   fontWeight: FontWeight.w500,

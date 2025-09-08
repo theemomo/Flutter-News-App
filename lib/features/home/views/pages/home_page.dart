@@ -88,7 +88,11 @@ class _HomePageState extends State<HomePage> {
                   } else if (state is TopHeadLinesLoading) {
                     return const CircularProgressIndicator.adaptive();
                   } else {
-                    return const CircularProgressIndicator.adaptive();
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(
+                        valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                      ),
+                    );
                   }
                 },
               ),
@@ -107,9 +111,17 @@ class _HomePageState extends State<HomePage> {
                   } else if (state is RecommendedNewsError) {
                     return Center(child: Text(state.message));
                   } else if (state is RecommendedNewsLoading) {
-                    return const CircularProgressIndicator.adaptive();
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(
+                        valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                      ),
+                    );
                   } else {
-                    return const CircularProgressIndicator.adaptive();
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(
+                        valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                      ),
+                    );
                   }
                 },
               ),
