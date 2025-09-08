@@ -19,9 +19,15 @@ class TitleHeadlineWidget extends StatelessWidget {
           ),
           TextButton(
             onPressed: onTap,
+            style: ButtonStyle(
+              overlayColor: WidgetStateProperty.all(Colors.transparent),
+            ),
             child: Text(
               "View All",
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500, color: AppColors.primaryColor),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColors.primaryColor,
+              ),
             ),
           ),
         ],

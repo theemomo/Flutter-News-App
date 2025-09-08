@@ -22,7 +22,7 @@ final class TopHeadLinesError extends HomeState {
 final class RecommendedNewsLoading extends HomeState {}
 
 final class RecommendedNewsLoaded extends HomeState {
-  final List<Article> articles;
+  final List<Article>? articles;
   RecommendedNewsLoaded(this.articles);
 }
 

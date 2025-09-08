@@ -69,12 +69,12 @@ class Article {
   }
 }
 
-class TopHeadlinesApiResponse {
+class NewsApiResponse {
   final String? status;
   final int? totalResults;
   final List<Article>? articles;
 
-  TopHeadlinesApiResponse({required this.status, required this.totalResults, this.articles});
+  NewsApiResponse({required this.status, required this.totalResults, this.articles});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -84,8 +84,8 @@ class TopHeadlinesApiResponse {
     };
   }
 
-  factory TopHeadlinesApiResponse.fromMap(Map<String, dynamic> map) {
-    return TopHeadlinesApiResponse(
+  factory NewsApiResponse.fromMap(Map<String, dynamic> map) {
+    return NewsApiResponse(
       status: map['status'] != null ? map['status'] as String : null,
       totalResults: map['totalResults'] != null ? map['totalResults'] as int : null,
       articles: map['articles'] != null ? List<Article>.from((map['articles'] as List<dynamic>).map<Article?>((x) => Article.fromMap(x as Map<String,dynamic>),),) : null,

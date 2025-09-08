@@ -1,21 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:news_app/core/utils/app_constants.dart';
 import 'package:news_app/core/models/news_api_response.dart';
-import 'package:news_app/features/home/models/top_headlines_request_body.dart';
+import 'package:news_app/features/search/models/search_request_body.dart';
 
-class HomeServices {
+class SearchServices {
   final aDio = Dio();
-  Future<NewsApiResponse> getTopHeadlines(TopHeadlinesRequestBody body) async {
+  Future<NewsApiResponse> search(SearchRequestBody body) async {
     aDio.options.baseUrl = AppConstants.baseUrl;
+
     try {
       final headers = {
         "X-Api-Key": AppConstants.apiKey,
         // "Authorization " : "Bearer ${AppConstants.apiKey}"
       };
       final Response response = await aDio.get(
-        AppConstants.topHeadlines,
+        AppConstants.everything,
         queryParameters: body.toMap(),
-        options: Options(headers: headers),
+        options: Options(headers: headers) 
       );
 
       if (response.statusCode == 200) {
