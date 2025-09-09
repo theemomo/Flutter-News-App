@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/utils/route/app_routes.dart';
 import 'package:news_app/core/utils/theme/app_colors.dart';
+import 'package:news_app/core/views/widgets/app_drawer.dart';
 import 'package:news_app/features/home/home_cubit/home_cubit.dart';
 import 'package:news_app/features/home/views/widgets/custom_carousel_slider.dart';
 import 'package:news_app/features/home/views/widgets/recommended_news_widget.dart';
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        drawer: const Drawer(),
+        drawer: const AppDrawer(),
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {

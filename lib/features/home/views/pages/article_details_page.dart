@@ -40,7 +40,7 @@ class ArticleDetailsPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              // Navigator.of(context).pop();
+              
             },
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
@@ -51,7 +51,7 @@ class ArticleDetailsPage extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
                   padding: const EdgeInsets.all(8.0),
-                  child: const Icon(CupertinoIcons.heart, color: AppColors.white),
+                  child: const Icon(CupertinoIcons.bookmark, color: AppColors.white),
                 ),
               ),
             ),
