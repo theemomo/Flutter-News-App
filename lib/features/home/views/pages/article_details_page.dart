@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/core/utils/theme/app_colors.dart';
 import 'package:news_app/core/models/news_api_response.dart';
 import 'dart:ui';
+import 'package:news_app/features/home/article_cubit/article_cubit.dart';
 
 class ArticleDetailsPage extends StatelessWidget {
   final Article article;
@@ -38,23 +40,90 @@ class ArticleDetailsPage extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              
-            },
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            icon: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 50, sigmaY: 40),
-                child: Container(
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
-                  padding: const EdgeInsets.all(8.0),
-                  child: const Icon(CupertinoIcons.bookmark, color: AppColors.white),
+          BlocBuilder<ArticleCubit, ArticleState>(
+            buildWhen: (previous, current) =>
+                (current is BookmarkAdded && current.title == article.title) ||
+                (current is BookmarkRemoved && current.title == article.title) ||
+                current is BookmarkLoading ||
+                current is BookmarkError,
+            builder: (context, state) {
+              if (state is BookmarkLoading) {
+                return IconButton(
+                  onPressed: () {},
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 40),
+                      child: Container(
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(CupertinoIcons.bookmark, color: AppColors.grey),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (state is BookmarkError) {
+                return IconButton(
+                  onPressed: () {},
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 40),
+                      child: Container(
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Icon(Icons.error, color: AppColors.white),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (state is BookmarkAdded || state is BookmarkRemoved) {
+                return IconButton(
+                  onPressed: () async {
+                    await BlocProvider.of<ArticleCubit>(context).setBookmark(article);
+                  },
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 40),
+                      child: Container(
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
+                        padding: const EdgeInsets.all(8.0),
+                        child: state is BookmarkAdded
+                            ? const Icon(CupertinoIcons.bookmark_fill, color: AppColors.white)
+                            : const Icon(CupertinoIcons.bookmark, color: AppColors.white),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return IconButton(
+                onPressed: () async {
+                  await BlocProvider.of<ArticleCubit>(context).setBookmark(article);
+                },
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 50, sigmaY: 40),
+                    child: Container(
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
+                      padding: const EdgeInsets.all(8.0),
+                      child: article.isBookmarked
+                          ? const Icon(CupertinoIcons.bookmark_fill, color: AppColors.white)
+                          : const Icon(CupertinoIcons.bookmark, color: AppColors.white),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
           IconButton(
             onPressed: () {

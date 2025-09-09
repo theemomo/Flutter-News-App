@@ -1,3 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 class Source {
   final String? id;
   final String? name;
@@ -5,10 +8,7 @@ class Source {
   Source({this.id, this.name});
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'name': name,
-    };
+    return <String, dynamic>{'id': id, 'name': name};
   }
 
   factory Source.fromMap(Map<String, dynamic> map) {
@@ -17,8 +17,6 @@ class Source {
       name: map['name'] != null ? map['name'] as String : null,
     );
   }
-
-
 }
 
 class Article {
@@ -30,6 +28,7 @@ class Article {
   final String? urlToImage;
   final String? publishedAt;
   final String? content;
+  final bool isBookmarked;
 
   Article({
     this.source,
@@ -40,6 +39,7 @@ class Article {
     this.urlToImage,
     this.publishedAt,
     this.content,
+    this.isBookmarked = false
   });
 
   Map<String, dynamic> toMap() {
@@ -57,7 +57,7 @@ class Article {
 
   factory Article.fromMap(Map<String, dynamic> map) {
     return Article(
-      source: map['source'] != null ? Source.fromMap(map['source'] as Map<String,dynamic>) : null,
+      source: map['source'] != null ? Source.fromMap(map['source'] as Map<String, dynamic>) : null,
       author: map['author'] != null ? map['author'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
       description: map['description'] != null ? map['description'] as String : null,
@@ -65,6 +65,35 @@ class Article {
       urlToImage: map['urlToImage'] != null ? map['urlToImage'] as String : null,
       publishedAt: map['publishedAt'] != null ? map['publishedAt'] as String : null,
       content: map['content'] != null ? map['content'] as String : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Article.fromJson(String source) =>
+      Article.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  Article copyWith({
+    Source? source,
+    String? author,
+    String? title,
+    String? description,
+    String? url,
+    String? urlToImage,
+    String? publishedAt,
+    String? content,
+    bool? isBookmarked,
+  }) {
+    return Article(
+      source: source ?? this.source,
+      author: author ?? this.author,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      url: url ?? this.url,
+      urlToImage: urlToImage ?? this.urlToImage,
+      publishedAt: publishedAt ?? this.publishedAt,
+      content: content ?? this.content,
+      isBookmarked: isBookmarked ?? this.isBookmarked,
     );
   }
 }
@@ -88,7 +117,13 @@ class NewsApiResponse {
     return NewsApiResponse(
       status: map['status'] != null ? map['status'] as String : null,
       totalResults: map['totalResults'] != null ? map['totalResults'] as int : null,
-      articles: map['articles'] != null ? List<Article>.from((map['articles'] as List<dynamic>).map<Article?>((x) => Article.fromMap(x as Map<String,dynamic>),),) : null,
+      articles: map['articles'] != null
+          ? List<Article>.from(
+              (map['articles'] as List<dynamic>).map<Article?>(
+                (x) => Article.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
     );
   }
 }
