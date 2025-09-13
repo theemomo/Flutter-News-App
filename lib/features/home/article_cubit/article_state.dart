@@ -7,13 +7,13 @@ final class ArticleInitial extends ArticleState {}
 final class BookmarkLoading extends ArticleState {}
 
 final class BookmarkAdded extends ArticleState {
-  final String title;
-  BookmarkAdded(this.title);
+  final Article article;
+  BookmarkAdded(this.article);
 }
 
 final class BookmarkRemoved extends ArticleState {
-  final String title;
-  BookmarkRemoved(this.title);
+  final Article article;
+  BookmarkRemoved(this.article);
 }
 
 final class BookmarkError extends ArticleState {

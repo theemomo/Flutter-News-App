@@ -42,11 +42,12 @@ class ArticleDetailsPage extends StatelessWidget {
         actions: [
           BlocBuilder<ArticleCubit, ArticleState>(
             buildWhen: (previous, current) =>
-                (current is BookmarkAdded && current.title == article.title) ||
-                (current is BookmarkRemoved && current.title == article.title) ||
+                (current is BookmarkAdded && current.article.title == article.title) ||
+                (current is BookmarkRemoved && current.article.title == article.title) ||
                 current is BookmarkLoading ||
                 current is BookmarkError,
             builder: (context, state) {
+              // bool isBookmarked = article.isBookmarked;
               if (state is BookmarkLoading) {
                 return IconButton(
                   onPressed: () {},
@@ -81,10 +82,11 @@ class ArticleDetailsPage extends StatelessWidget {
                     ),
                   ),
                 );
-              } else if (state is BookmarkAdded || state is BookmarkRemoved) {
+              } else if (state is BookmarkAdded) {
                 return IconButton(
                   onPressed: () async {
-                    await BlocProvider.of<ArticleCubit>(context).setBookmark(article);
+                    await BlocProvider.of<ArticleCubit>(context).setBookmark(state.article);
+                    debugPrint(article.isBookmarked.toString());
                   },
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
@@ -95,9 +97,27 @@ class ArticleDetailsPage extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
                         padding: const EdgeInsets.all(8.0),
-                        child: state is BookmarkAdded
-                            ? const Icon(CupertinoIcons.bookmark_fill, color: AppColors.white)
-                            : const Icon(CupertinoIcons.bookmark, color: AppColors.white),
+                        child: const Icon(CupertinoIcons.bookmark_fill, color: AppColors.white),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (state is BookmarkRemoved) {
+                return IconButton(
+                  onPressed: () async {
+                    await BlocProvider.of<ArticleCubit>(context).setBookmark(state.article);
+                    debugPrint(article.isBookmarked.toString());
+                  },
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 40),
+                      child: Container(
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Icon(CupertinoIcons.bookmark, color: AppColors.white),
                       ),
                     ),
                   ),
@@ -106,6 +126,7 @@ class ArticleDetailsPage extends StatelessWidget {
               return IconButton(
                 onPressed: () async {
                   await BlocProvider.of<ArticleCubit>(context).setBookmark(article);
+                  debugPrint(article.isBookmarked.toString());
                 },
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent,

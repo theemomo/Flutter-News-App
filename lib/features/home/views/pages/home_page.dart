@@ -72,62 +72,72 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              TitleHeadlineWidget(title: "Breaking News", onTap: () {}),
-              BlocBuilder<HomeCubit, HomeState>(
-                buildWhen: (previous, current) =>
-                    current is TopHeadLinesLoading ||
-                    current is TopHeadLinesLoaded ||
-                    current is TopHeadLinesError,
-                builder: (context, state) {
-                  if (state is TopHeadLinesLoaded) {
-                    return CustomCarouselSlider(articles: state.articles ?? []);
-                  } else if (state is TopHeadLinesError) {
-                    return Center(child: Text(state.message));
-                  } else if (state is TopHeadLinesLoading) {
-                    return const CircularProgressIndicator.adaptive();
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator.adaptive(
-                        valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
-                      ),
-                    );
-                  }
-                },
+        body: Builder(
+          builder: (context) {
+            return RefreshIndicator(
+              onRefresh: () async{
+                await BlocProvider.of<HomeCubit>(context).getTopHeadlines();
+                await BlocProvider.of<HomeCubit>(context).getRecommendationNews();
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TitleHeadlineWidget(title: "Breaking News", onTap: () {}),
+                    BlocBuilder<HomeCubit, HomeState>(
+                      buildWhen: (previous, current) =>
+                          current is TopHeadLinesLoading ||
+                          current is TopHeadLinesLoaded ||
+                          current is TopHeadLinesError,
+                      builder: (context, state) {
+                        if (state is TopHeadLinesLoaded) {
+                          return CustomCarouselSlider(articles: state.articles ?? []);
+                        } else if (state is TopHeadLinesError) {
+                          return Center(child: Text(state.message));
+                        } else if (state is TopHeadLinesLoading) {
+                          return const CircularProgressIndicator.adaptive();
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator.adaptive(
+                              valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    TitleHeadlineWidget(title: "Recommendation", onTap: () {}),
+                    BlocBuilder<HomeCubit, HomeState>(
+                      buildWhen: (previous, current) =>
+                          current is RecommendedNewsError ||
+                          current is RecommendedNewsLoaded ||
+                          current is RecommendedNewsLoading,
+                      builder: (context, state) {
+                        if (state is RecommendedNewsLoaded) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: RecommendedNewsWidget(articles: state.articles ?? []),
+                          );
+                        } else if (state is RecommendedNewsError) {
+                          return Center(child: Text(state.message));
+                        } else if (state is RecommendedNewsLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator.adaptive(
+                              valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator.adaptive(
+                              valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-              TitleHeadlineWidget(title: "Recommendation", onTap: () {}),
-              BlocBuilder<HomeCubit, HomeState>(
-                buildWhen: (previous, current) =>
-                    current is RecommendedNewsError ||
-                    current is RecommendedNewsLoaded ||
-                    current is RecommendedNewsLoading,
-                builder: (context, state) {
-                  if (state is RecommendedNewsLoaded) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: RecommendedNewsWidget(articles: state.articles ?? []),
-                    );
-                  } else if (state is RecommendedNewsError) {
-                    return Center(child: Text(state.message));
-                  } else if (state is RecommendedNewsLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator.adaptive(
-                        valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
-                      ),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator.adaptive(
-                        valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+            );
+          }
         ),
       ),
     );

@@ -12,12 +12,45 @@ class HomeCubit extends Cubit<HomeState> {
   final _homeServices = HomeServices();
   final _localDatabaseServices = LocalDatabaseService();
 
+  Future<void> getHomePage() async {
+    emit(HomePageLoading());
+    try {
+      await getTopHeadlines();
+      await getRecommendationNews();
+      emit(HomePageLoaded());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> getTopHeadlines() async {
     emit(TopHeadLinesLoading());
     try {
       final requestBody = TopHeadlinesRequestBody(page: 1, pageSize: 10, category: "business");
       final response = await _homeServices.getTopHeadlines(requestBody);
-      emit(TopHeadLinesLoaded(response.articles));
+      final articles = response.articles ?? [];
+
+      // * get book mark list from the local database
+      final bookmarks = await _localDatabaseServices.getStringList(AppConstants.bookmarkKey);
+      // final bookmarks = await _localDatabaseHive.getData<List<Article>>(AppConstants.localDatabaseBox);
+      final List<Article> bookmarkArticles = [];
+      if (bookmarks != null) {
+        for (var bookmarkString in bookmarks) {
+          final Article bookmarkArticle = Article.fromJson(bookmarkString);
+          bookmarkArticles.add(bookmarkArticle);
+        }
+      }
+
+      // * loop on the articles list to see if we found it in the bookmarkArticles
+      for (int i = 0; i < articles.length; i++) {
+        var article = articles[i];
+        final bool isFound = bookmarkArticles.any((element) => element.title == article.title);
+        if (isFound) {
+          article = article.copyWith(isBookmarked: true);
+          articles[i] = article;
+        }
+      }
+      emit(TopHeadLinesLoaded(articles));
     } catch (e) {
       emit(TopHeadLinesError(e.toString()));
     }
@@ -30,7 +63,9 @@ class HomeCubit extends Cubit<HomeState> {
       final response = await _homeServices.getTopHeadlines(requestBody);
       final articles = response.articles ?? [];
 
+      // * get book mark list from the local database
       final bookmarks = await _localDatabaseServices.getStringList(AppConstants.bookmarkKey);
+      // final bookmarks = await _localDatabaseHive.getData<List<Article>>(AppConstants.localDatabaseBox);
       final List<Article> bookmarkArticles = [];
       if (bookmarks != null) {
         for (var bookmarkString in bookmarks) {
@@ -39,6 +74,7 @@ class HomeCubit extends Cubit<HomeState> {
         }
       }
 
+      // * loop on the articles list to see if we found it in the bookmarkArticles
       for (int i = 0; i < articles.length; i++) {
         var article = articles[i];
         final bool isFound = bookmarkArticles.any((element) => element.title == article.title);

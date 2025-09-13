@@ -29,7 +29,7 @@ class BookmarkPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     children: [
-                      ArticleItemWidget(article: state.articles[index]),
+                      ArticleItemWidget(article: state.articles[index], inBookmark: true,),
                       const Divider()
                     ],
                   ),

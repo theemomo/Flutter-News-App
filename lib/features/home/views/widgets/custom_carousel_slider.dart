@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/core/utils/route/app_routes.dart';
 import 'package:news_app/core/utils/theme/app_colors.dart';
 import 'package:news_app/core/models/news_api_response.dart';
+import 'package:news_app/features/home/home_cubit/home_cubit.dart';
 
 class CustomCarouselSlider extends StatefulWidget {
   final List<Article> articles;
@@ -30,7 +32,11 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
               final publishedAtDate = DateFormat.yMMMd().format(parsedDate);
               return InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.articleRoute, arguments: article);
+                  Navigator.pushNamed(context, AppRoutes.articleRoute, arguments: article).then((value){
+                    if (!mounted) return;
+                    BlocProvider.of<HomeCubit>(context).getTopHeadlines();
+                    BlocProvider.of<HomeCubit>(context).getRecommendationNews();
+                  });
                 },
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(20.0)),

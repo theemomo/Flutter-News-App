@@ -32,5 +32,8 @@ final class RecommendedNewsError extends HomeState {
 }
 
 
+// Home Page
+final class HomePageLoading extends HomeState{}
 
+final class HomePageLoaded extends HomeState{}
 

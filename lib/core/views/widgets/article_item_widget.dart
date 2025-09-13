@@ -1,13 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/core/models/news_api_response.dart';
 import 'package:news_app/core/utils/route/app_routes.dart';
 import 'package:news_app/core/utils/theme/app_colors.dart';
+import 'package:news_app/features/bookmark/bookmark_cubit/bookmark_cubit.dart';
+import 'package:news_app/features/home/home_cubit/home_cubit.dart';
 
 class ArticleItemWidget extends StatelessWidget {
   final Article article;
-  const ArticleItemWidget({super.key, required this.article});
+  final bool inBookmark;
+  const ArticleItemWidget({super.key, required this.article, this.inBookmark = false});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,16 @@ class ArticleItemWidget extends StatelessWidget {
     final formattedDate = DateFormat.yMMMd().format(parsedDate);
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(AppRoutes.articleRoute, arguments: article);
+        if (inBookmark) {
+          Navigator.of(context).pushNamed(AppRoutes.articleRoute, arguments: article).then((value) {
+            BlocProvider.of<BookmarkCubit>(context).getBookmarked();
+          });
+        } else {
+          Navigator.of(context).pushNamed(AppRoutes.articleRoute, arguments: article).then((value) {
+            BlocProvider.of<HomeCubit>(context).getTopHeadlines();
+            BlocProvider.of<HomeCubit>(context).getRecommendationNews();
+          });
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),

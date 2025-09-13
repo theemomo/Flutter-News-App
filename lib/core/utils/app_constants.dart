@@ -10,4 +10,7 @@ class AppConstants {
 
   // Shared Preferences
   static const String bookmarkKey = "bookmark";
+
+  // Hive
+  static const String localDatabaseBox = "local_database";
 }
