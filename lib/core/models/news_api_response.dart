@@ -1,8 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class Source {
+import 'package:hive/hive.dart';
+
+part 'news_api_response.g.dart';
+
+@HiveType(typeId: 1)
+class Source extends HiveObject {
+  @HiveField(0)
   final String? id;
+  @HiveField(1)
   final String? name;
 
   Source({this.id, this.name});
@@ -19,15 +26,25 @@ class Source {
   }
 }
 
-class Article {
+@HiveType(typeId: 0)
+class Article extends HiveObject {
+  @HiveField(0)
   final Source? source;
+  @HiveField(1)
   final String? author;
+  @HiveField(2)
   final String? title;
+  @HiveField(3)
   final String? description;
+  @HiveField(4)
   final String? url;
+  @HiveField(5)
   final String? urlToImage;
+  @HiveField(6)
   final String? publishedAt;
+  @HiveField(7)
   final String? content;
+  @HiveField(8)
   final bool isBookmarked;
 
   Article({
