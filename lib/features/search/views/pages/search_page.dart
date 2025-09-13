@@ -31,6 +31,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -86,7 +87,14 @@ class _SearchPageState extends State<SearchPage> {
                           }
                         },
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.035,
+                          height: MediaQuery.of(context).size.shortestSide > 600
+                              ? orientation == Orientation.portrait
+                                    ? MediaQuery.of(context).size.height * 0.035
+                                    : MediaQuery.of(context).size.height * 0.05
+                              : orientation == Orientation.portrait
+                              ? MediaQuery.of(context).size.height * 0.035
+                              : MediaQuery.of(context).size.height * 0.09,
+
                           width: MediaQuery.of(context).size.width * 0.15,
                           decoration: BoxDecoration(
                             color: AppColors.primaryColor,
@@ -95,10 +103,15 @@ class _SearchPageState extends State<SearchPage> {
                           child: Center(
                             child: Text(
                               "Search",
-                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: AppColors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: MediaQuery.of(context).size.shortestSide > 600
+                                  ? Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: AppColors.white,
+                                      fontWeight: FontWeight.bold,
+                                    )
+                                  : Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                      color: AppColors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                             ),
                           ),
                         ),
@@ -107,7 +120,13 @@ class _SearchPageState extends State<SearchPage> {
                       return TextButton(
                         onPressed: null,
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.035,
+                          height: MediaQuery.of(context).size.shortestSide > 600
+                              ? orientation == Orientation.portrait
+                                    ? MediaQuery.of(context).size.height * 0.035
+                                    : MediaQuery.of(context).size.height * 0.05
+                              : orientation == Orientation.portrait
+                              ? MediaQuery.of(context).size.height * 0.035
+                              : MediaQuery.of(context).size.height * 0.09,
                           width: MediaQuery.of(context).size.width * 0.15,
                           decoration: BoxDecoration(
                             color: AppColors.primaryColor,
@@ -116,10 +135,15 @@ class _SearchPageState extends State<SearchPage> {
                           child: Center(
                             child: Text(
                               "Search",
-                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Colors.white70,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: MediaQuery.of(context).size.shortestSide > 600
+                                  ? Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: AppColors.white,
+                                      fontWeight: FontWeight.bold,
+                                    )
+                                  : Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                      color: AppColors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                             ),
                           ),
                         ),
@@ -138,7 +162,14 @@ class _SearchPageState extends State<SearchPage> {
                         }
                       },
                       child: Container(
-                        height: MediaQuery.of(context).size.height * 0.035,
+                        height: MediaQuery.of(context).size.shortestSide > 600
+                            ? orientation == Orientation.portrait
+                                  ? MediaQuery.of(context).size.height * 0.035
+                                  : MediaQuery.of(context).size.height * 0.05
+                            : orientation == Orientation.portrait
+                            ? MediaQuery.of(context).size.height * 0.035
+                            : MediaQuery.of(context).size.height * 0.09,
+
                         width: MediaQuery.of(context).size.width * 0.15,
                         decoration: BoxDecoration(
                           color: AppColors.primaryColor,
@@ -147,10 +178,15 @@ class _SearchPageState extends State<SearchPage> {
                         child: Center(
                           child: Text(
                             "Search",
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: MediaQuery.of(context).size.shortestSide > 600
+                                ? Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: AppColors.white,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                                : Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: AppColors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                           ),
                         ),
                       ),

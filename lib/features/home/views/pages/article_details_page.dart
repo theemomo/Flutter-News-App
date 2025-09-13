@@ -14,6 +14,7 @@ class ArticleDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
     final parsedDate = DateTime.parse(article.publishedAt ?? DateTime.now().toIso8601String());
     final formattedDate = DateFormat.yMMMd().format(parsedDate);
     return Scaffold(
@@ -208,7 +209,9 @@ class ArticleDetailsPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.39),
+            padding: orientation == Orientation.portrait
+                ? EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.39)
+                : EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.18),
             child: Column(
               children: [
                 Padding(
@@ -221,35 +224,46 @@ class ArticleDetailsPage extends StatelessWidget {
                           color: AppColors.primaryColor,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
-                          child: Text(
-                            "General",
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        child: orientation == Orientation.portrait
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
+                                child: Text(
+                                  "General",
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: AppColors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              )
+                            : null,
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       Text(
                         article.title ?? "",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: MediaQuery.of(context).size.shortestSide > 600
+                            ? Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.bold,
+                              )
+                            : Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       Text(
                         "${article.author ?? ''} • $formattedDate",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium!.copyWith(color: AppColors.white),
+                        style: MediaQuery.of(context).size.shortestSide > 600
+                            ? Theme.of(
+                                context,
+                              ).textTheme.bodyLarge!.copyWith(color: AppColors.white)
+                            : Theme.of(
+                                context,
+                              ).textTheme.bodyMedium!.copyWith(color: AppColors.white),
                       ),
                     ],
                   ),
@@ -298,10 +312,15 @@ class ArticleDetailsPage extends StatelessWidget {
                               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                               Text(
                                 "${article.description ?? ""} ${article.description ?? ""} ${article.description ?? ""} ${article.description ?? ""} ${article.content ?? ""}",
-                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                  color: AppColors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: MediaQuery.of(context).size.shortestSide > 600
+                                    ? Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.w500,
+                                      )
+                                    : Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                               ),
                             ],
                           ),

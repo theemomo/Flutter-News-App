@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+  final orientation = MediaQuery.of(context).orientation;
     return BlocProvider(
       create: (context) {
         final cubit = HomeCubit();
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         body: Builder(
           builder: (context) {
             return RefreshIndicator(
-              onRefresh: () async{
+              onRefresh: () async {
                 await BlocProvider.of<HomeCubit>(context).getTopHeadlines();
                 await BlocProvider.of<HomeCubit>(context).getRecommendationNews();
               },
@@ -83,27 +84,27 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     TitleHeadlineWidget(title: "Breaking News", onTap: () {}),
-                    BlocBuilder<HomeCubit, HomeState>(
-                      buildWhen: (previous, current) =>
-                          current is TopHeadLinesLoading ||
-                          current is TopHeadLinesLoaded ||
-                          current is TopHeadLinesError,
-                      builder: (context, state) {
-                        if (state is TopHeadLinesLoaded) {
-                          return CustomCarouselSlider(articles: state.articles ?? []);
-                        } else if (state is TopHeadLinesError) {
-                          return Center(child: Text(state.message));
-                        } else if (state is TopHeadLinesLoading) {
-                          return const CircularProgressIndicator.adaptive();
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(
-                              valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                      BlocBuilder<HomeCubit, HomeState>(
+                        buildWhen: (previous, current) =>
+                            current is TopHeadLinesLoading ||
+                            current is TopHeadLinesLoaded ||
+                            current is TopHeadLinesError,
+                        builder: (context, state) {
+                          if (state is TopHeadLinesLoaded) {
+                            return CustomCarouselSlider(articles: state.articles ?? []);
+                          } else if (state is TopHeadLinesError) {
+                            return Center(child: Text(state.message));
+                          } else if (state is TopHeadLinesLoading) {
+                            return const CircularProgressIndicator.adaptive();
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(
+                                valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                              ),
+                            );
+                          }
+                        },
+                      ),
                     TitleHeadlineWidget(title: "Recommendation", onTap: () {}),
                     BlocBuilder<HomeCubit, HomeState>(
                       buildWhen: (previous, current) =>
@@ -137,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             );
-          }
+          },
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/utils/theme/app_colors.dart';
@@ -29,14 +30,38 @@ class BookmarkPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     children: [
-                      ArticleItemWidget(article: state.articles[index], inBookmark: true,),
-                      const Divider()
+                      ArticleItemWidget(article: state.articles[index], inBookmark: true),
+                      const Divider(),
                     ],
                   ),
                 ),
               );
             } else {
-              return const Center(child: Text("No Bookmark Items Found"),);
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 100.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: "https://cdn-icons-png.flaticon.com/512/13982/13982771.png",
+                        height: MediaQuery.of(context).size.height * 0.18,
+                        color: AppColors.primaryColor,
+                      ),
+                      SizedBox(height:  MediaQuery.of(context).size.height * 0.02,),
+                      Center(
+                        child: Text(
+                          "No Bookmark Items Found",
+                          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             }
           } else if (state is BookmarkError) {
             return Center(child: Text(state.error));

@@ -22,17 +22,32 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
     return Column(
       children: [
         SizedBox(
-          height: 210,
+          height: MediaQuery.of(context).size.shortestSide > 600
+              ? orientation ==
+                        Orientation
+                            .portrait // Tablet
+                    ? MediaQuery.of(context).size.height * 0.28
+                    : MediaQuery.of(context).size.height * 0.3
+              : orientation ==
+                    Orientation
+                        .portrait // Smart Phone
+              ? MediaQuery.of(context).size.height * 0.28
+              : MediaQuery.of(context).size.height * 0.5,
+
+          width: MediaQuery.of(context).size.width,
           child: CarouselSlider(
             items: widget.articles.map((article) {
               final parsedDate = DateTime.parse(article.publishedAt ?? DateTime.now().toString());
               final publishedAtDate = DateFormat.yMMMd().format(parsedDate);
               return InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.articleRoute, arguments: article).then((value){
+                  Navigator.pushNamed(context, AppRoutes.articleRoute, arguments: article).then((
+                    value,
+                  ) {
                     if (!mounted) return;
                     BlocProvider.of<HomeCubit>(context).getTopHeadlines();
                     BlocProvider.of<HomeCubit>(context).getRecommendationNews();
@@ -48,16 +63,25 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                             'https://imgs.search.brave.com/4QxmcZ7tq_opuG5R8dwTzb3gYaIKYkDQC2iZRJ4a2Wk/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9kZXZl/bG9wZXJzLmVsZW1l/bnRvci5jb20vZG9j/cy9hc3NldHMvaW1n/L2VsZW1lbnRvci1w/bGFjZWhvbGRlci1p/bWFnZS5wbmc',
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        height: 210,
+                        // height: 210,
                         placeholder: (context, url) {
                           return Container(
                             width: MediaQuery.of(context).size.width * 0.38,
-                            height: MediaQuery.of(context).size.height * 0.16,
+                            height: MediaQuery.of(context).size.shortestSide > 600
+                                ? orientation == Orientation.portrait
+                                      ? MediaQuery.of(context).size.height * 0.28
+                                      : MediaQuery.of(context).size.height *
+                                            0.5 // Tablet
+                                : orientation == Orientation.portrait
+                                ? MediaQuery.of(context).size.height * 0.28
+                                : MediaQuery.of(context).size.height * 0.5, // Smart Phone
                             color: Colors.grey.shade300,
-                            child: const Center(child: CircularProgressIndicator.adaptive(
-                              valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
-                              strokeWidth: 2,
-                            )),
+                            child: const Center(
+                              child: CircularProgressIndicator.adaptive(
+                                valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
+                                strokeWidth: 2,
+                              ),
+                            ),
                           );
                         },
                         errorWidget: (context, url, error) => CachedNetworkImage(

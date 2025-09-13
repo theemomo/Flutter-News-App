@@ -15,19 +15,24 @@ class TitleHeadlineWidget extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w500),
+            style: MediaQuery.of(context).size.width > 600
+                ? Theme.of(context).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.w500)
+                : Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w500),
           ),
           TextButton(
             onPressed: onTap,
-            style: ButtonStyle(
-              overlayColor: WidgetStateProperty.all(Colors.transparent),
-            ),
+            style: ButtonStyle(overlayColor: WidgetStateProperty.all(Colors.transparent)),
             child: Text(
               "View All",
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontWeight: FontWeight.w500,
-                color: AppColors.primaryColor,
-              ),
+              style: MediaQuery.of(context).size.width > 600
+                  ? Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primaryColor,
+                    )
+                  : Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primaryColor,
+                    ),
             ),
           ),
         ],

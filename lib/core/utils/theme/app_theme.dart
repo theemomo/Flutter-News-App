@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:news_app/core/utils/theme/app_colors.dart';
 
 class AppTheme {
@@ -24,6 +25,6 @@ class AppTheme {
       style: ButtonStyle(overlayColor: WidgetStateProperty.all(Colors.transparent)),
     ),
     scaffoldBackgroundColor: Colors.white,
-    
+    textTheme: GoogleFonts.openSansTextTheme(),
   );
 }
