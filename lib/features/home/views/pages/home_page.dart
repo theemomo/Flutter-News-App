@@ -20,7 +20,6 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-  final orientation = MediaQuery.of(context).orientation;
     return BlocProvider(
       create: (context) {
         final cubit = HomeCubit();
