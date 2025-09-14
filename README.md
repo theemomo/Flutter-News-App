@@ -43,3 +43,6 @@ It integrates with a RESTful API to fetch real-time news and provides bookmarkin
 1. Clone the repo:
    ```bash
    git clone https://github.com/theemomo/Flutter-News-App.git
+
+---
+⭐ If you find this project useful, please star the repository!
